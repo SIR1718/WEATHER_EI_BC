@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>FLICKR</title>
+	<meta charset="utf-8">
+	<style type="text/css">
+		img {	margin : 10px;
+				border-style: solid;
+				border-width: 1px;
+				border-color: navy;
+				border-radius: 20px;
+		}
+	</style>
+	
+
+
+</head>
+<body>
+<div id = "control">
+	<input type="text" id="intext" name="">
+	<button id="bget"> Obter Estado do Tempo</button>
+	<button id="bclean"> Limpar</button>
+</div>
+<div id="content">
+	
+</div>
+</body>
+<script type="text/javascript">
+	
+	/*
+	http://api.openweathermap.org/data/2.5/weather?
+		q=barroselas&
+		appid=fa454439b36b644d49e751a9b0afbcfc&
+		units=metric
+	*/
+
+
+	url_base 	= "http://api.openweathermap.org/data/2.5/weather?";
+	fapikey  	= "appid=fa454439b36b644d49e751a9b0afbcfc";
+	funits		= "units=metric";
+
+	divcontent = document.getElementById("content");
+
+	bget = document.getElementById("bget");
+	bget.addEventListener("click", getWeather);
+
+	bclean = document.getElementById("bclean");
+	bclean.addEventListener("click",cleanWeather);
+
+	function cleanWeather() {
+		divcontent.innerHTML = "";
+	}
+
+	function getWeather() {
+
+
+		intext = document.getElementById("intext");
+		intextStr = intext.value;
+
+		fsearch = "q=" + intextStr;
+
+		urlFinal = 	url_base + 
+					fsearch + "&" + 
+					funits + "&" +
+					fapikey;
+
+
+		console.log(urlFinal);
+
+		// instanciar novo objecto XMLHttpRequest
+		req = new XMLHttpRequest();
+
+
+		// configurar
+		req.open("GET",urlFinal);
+
+		req.onreadystatechange = function () {
+			console.log(req.readyState);
+			console.log(req.status);
+			if (req.readyState == 4 && req.status == 200) {
+				console.log(req.responseText);
+				result = JSON.parse(req.responseText);
+				console.log(result);
+
+				ndiv     = document.createElement("div");
+
+				nh1local = document.createElement("h1");
+				nh1local.innerHTML = result.name;
+				nh1temp  = document.createElement("h1");
+				nh1temp.innerHTML = result.main.temp + "ºC";
+				nimg     = document.createElement("img");
+				nimg.setAttribute("src", "http://openweathermap.org/img/w/" + result.weather[0].icon + ".png");
+
+				nh1temp.appendChild(nimg);
+				ndiv.appendChild(nh1local);
+				ndiv.appendChild(nh1temp);
+				divcontent.append(ndiv);
+
+			}
+		}
+
+		// efetuar pedido
+		req.send();
+
+
+	}
+
+
+
+</script>
+</html>
