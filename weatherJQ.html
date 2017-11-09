@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>FLICKR</title>
+	<meta charset="utf-8">
+	<script type="text/javascript" src="js/jquery-3.2.1.js"></script>
+</head>
+<body>
+<div id = "control">
+	<input type="text" id="intext" name="">
+	<button id="bget"> Obter Estado do Tempo</button>
+	<button id="bclean"> Limpar</button>
+</div>
+<div id="content">
+	çsk açlskd çlaskd çlaskd çl
+</div>
+</body>
+<script type="text/javascript">
+	
+	/*
+	http://api.openweathermap.org/data/2.5/weather?
+		q=barroselas&
+		appid=fa454439b36b644d49e751a9b0afbcfc&
+		units=metric
+	*/
+
+	//$("button").html("clica-me").click(function () {alert("ola")});
+
+	url_base 	= "http://api.openweathermap.org/data/2.5/weather?";
+	fapikey  	= "appid=fa454439b36b644d49e751a9b0afbcfc";
+	funits		= "units=metric";
+
+	divcontent = document.getElementById("content");
+
+	$("#bget").click(getWeather);
+	$("#bclean").click(cleanWeather);
+
+	//bget = document.getElementById("bget");
+	//bget.addEventListener("click", getWeather);
+
+	//bclean = document.getElementById("bclean");
+	//bclean.addEventListener("click",cleanWeather);
+
+	function cleanWeather() {
+
+		//divcontent.innerHTML = "";
+		//$(divcontent).html("");
+		$("#content").html("");
+	}
+
+	function getWeather() {
+				console.log("ok");
+
+		$.ajax({
+			url : "http://api.openweathermap.org/data/2.5/weather",
+			dataType : "json",
+			method : "GET",
+			data : {
+				"q" : $("#intext").val(),
+				"units" : "metric",
+				"appid" : "fa454439b36b644d49e751a9b0afbcfc"
+			},
+			success : function (respData) {
+				console.log(respData);
+				$("#content").append($("<div/>")
+					.append($("<h1/>").html(respData.name))
+					.append($("<h1/>").html(respData.main.temp + "ºC")));
+			}
+		});
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+		intextStr = $("#intext").val()
+		//intext = document.getElementById("intext");
+		//intextStr = intext.value;
+
+		fsearch = "q=" + intextStr;
+
+		urlFinal = 	url_base + 
+					fsearch + "&" + 
+					funits + "&" +
+					fapikey;
+
+
+		console.log(urlFinal);
+
+		// instanciar novo objecto XMLHttpRequest
+		req = new XMLHttpRequest();
+
+
+		// configurar
+		req.open("GET",urlFinal);
+
+		req.onreadystatechange = function () {
+			console.log(req.readyState);
+			console.log(req.status);
+			if (req.readyState == 4 && req.status == 200) {
+				console.log(req.responseText);
+				result = JSON.parse(req.responseText);
+				console.log(result);
+
+				ndiv     = document.createElement("div");
+
+				nh1local = document.createElement("h1");
+				nh1local.innerHTML = result.name;
+				nh1temp  = document.createElement("h1");
+				nh1temp.innerHTML = result.main.temp + "ºC";
+				nimg     = document.createElement("img");
+				nimg.setAttribute("src", "http://openweathermap.org/img/w/" + result.weather[0].icon + ".png");
+
+				nh1temp.appendChild(nimg);
+				ndiv.appendChild(nh1local);
+				ndiv.appendChild(nh1temp);
+				divcontent.append(ndiv);
+
+			}
+		}
+
+		// efetuar pedido
+		req.send();
+
+*/
+
+
+
+</script>
+</html>
